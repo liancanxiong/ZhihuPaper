@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_night"
+            android:title="@string/menu_night" />
+        <item
+            android:id="@+id/menu_cache"
+            android:title="@string/menu_cache" />
+        <item
+            android:id="@+id/menu_about"
+            android:title="@string/menu_about" />
+    </group>
+</menu>

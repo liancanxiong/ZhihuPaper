@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_about">关于</string>
+    <string name="menu_cache">清除缓存</string>
+    <string name="menu_night">夜间模式</string>
+    <string name="drawer_open"></string>
+    <string name="exit">双击退出</string>
+    <string name="refresh_success">数据已刷新...</string>
+</resources>
