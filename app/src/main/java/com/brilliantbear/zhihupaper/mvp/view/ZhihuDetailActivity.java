@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
-import android.webkit.WebChromeClient;
+import android.view.animation.AlphaAnimation;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -40,12 +38,10 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
     @Override
     protected void initView(Bundle savedInstanceState) {
         super.initView(savedInstanceState);
-
         ivPic = (ImageView) findViewById(R.id.iv_pic);
         progress = (ProgressBar) findViewById(R.id.progress);
         toolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         webDetail = (WebView) findViewById(R.id.web_detail);
-
         initWebView();
     }
 
@@ -60,10 +56,9 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
         Log.d("!@#", "title:" + title + " id:" + id + " url:" + url);
 
         IDetailPresenter presenter = new ZhihuDetailPresenter(this, this);
-        ZhihuDetail detail = DB.getInstance().getZhihuDetailById(id);
+        final ZhihuDetail detail = DB.getInstance().getZhihuDetailById(id);
         if (null != detail) {
             showDetail(detail);
-
         } else {
             presenter.loadDetail(id);
         }
@@ -72,10 +67,16 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
         toolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
         toolbarLayout.setExpandedTitleColor(Color.WHITE);
 
-
     }
 
+    @Override
+    public void onBackPressed() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
+        alphaAnimation.setDuration(500);
+        webDetail.startAnimation(alphaAnimation);
 
+        super.onBackPressed();
+    }
 
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {

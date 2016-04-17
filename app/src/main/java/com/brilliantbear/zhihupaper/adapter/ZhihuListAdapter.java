@@ -1,9 +1,12 @@
 package com.brilliantbear.zhihupaper.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +16,10 @@ import android.widget.TextView;
 import com.brilliantbear.zhihupaper.R;
 import com.brilliantbear.zhihupaper.db.ZhihuStory;
 import com.brilliantbear.zhihupaper.mvp.view.ZhihuDetailActivity;
+import com.brilliantbear.zhihupaper.utils.DateUtils;
 import com.brilliantbear.zhihupaper.utils.GlideUtils;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,6 +36,7 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
         this.stories = stories;
     }
 
+
     @Override
     public ZhihuListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_zhihu_list, parent, false);
@@ -39,6 +45,17 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
 
     @Override
     public void onBindViewHolder(final ZhihuListViewHolder holder, int position) {
+
+        holder.tvDate.setVisibility(View.GONE);
+        if (position > 0) {
+            String dateStr = stories.get(position).getDate();
+            if (dateStr != null && !TextUtils.equals(stories.get(position - 1).getDate(), dateStr)) {
+                holder.tvDate.setVisibility(View.VISIBLE);
+                Date date = DateUtils.parseStandardString(dateStr);
+                holder.tvDate.setText(DateUtils.parseStandardDate(date, "yyyy-MM-dd"));
+            }
+        }
+
         final ZhihuStory story = stories.get(position);
         holder.tvTitle.setText(story.getTitle());
         GlideUtils.load(holder.itemView.getContext(), story.getImage(), holder.ivPic);
@@ -50,9 +67,12 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
                 intent.putExtra("title", story.getTitle());
                 intent.putExtra("id", story.getId());
                 intent.putExtra("url", story.getImage());
-                context.startActivity(intent);
-
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.ivPic, context.getString(R.string.transition_pic)).toBundle());
+                } else {
+                    context.startActivity(intent);
+                }
+//                context.startActivity(intent);
             }
         });
     }
@@ -65,11 +85,13 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
     public static class ZhihuListViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivPic;
         public TextView tvTitle;
+        public TextView tvDate;
 
         public ZhihuListViewHolder(View itemView) {
             super(itemView);
             ivPic = (ImageView) itemView.findViewById(R.id.iv_pic);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            tvDate = (TextView) itemView.findViewById(R.id.tv_date);
         }
     }
 
