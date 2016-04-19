@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by cx.lian on 2016/4/12.
  */
-public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.ZhihuListViewHolder> {
+public class ZhihuListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<ZhihuStory> stories;
     private Context context;
@@ -38,27 +38,28 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
 
 
     @Override
-    public ZhihuListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_zhihu_list, parent, false);
         return new ZhihuListViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ZhihuListViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-        holder.tvDate.setVisibility(View.GONE);
+        final ZhihuListViewHolder listHolder = (ZhihuListViewHolder) holder;
+        listHolder.tvDate.setVisibility(View.GONE);
         if (position > 0) {
             String dateStr = stories.get(position).getDate();
             if (dateStr != null && !TextUtils.equals(stories.get(position - 1).getDate(), dateStr)) {
-                holder.tvDate.setVisibility(View.VISIBLE);
+                listHolder.tvDate.setVisibility(View.VISIBLE);
                 Date date = DateUtils.parseStandardString(dateStr);
-                holder.tvDate.setText(DateUtils.parseStandardDate(date, "yyyy-MM-dd"));
+                listHolder.tvDate.setText(DateUtils.parseStandardDate(date, "yyyy-MM-dd"));
             }
         }
 
         final ZhihuStory story = stories.get(position);
-        holder.tvTitle.setText(story.getTitle());
-        GlideUtils.load(holder.itemView.getContext(), story.getImage(), holder.ivPic);
+        listHolder.tvTitle.setText(story.getTitle());
+        GlideUtils.load(holder.itemView.getContext(), story.getImage(), listHolder.ivPic);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,18 +69,17 @@ public class ZhihuListAdapter extends RecyclerView.Adapter<ZhihuListAdapter.Zhih
                 intent.putExtra("id", story.getId());
                 intent.putExtra("url", story.getImage());
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, holder.ivPic, context.getString(R.string.transition_pic)).toBundle());
+                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context, listHolder.ivPic, context.getString(R.string.transition_pic)).toBundle());
                 } else {
                     context.startActivity(intent);
                 }
-//                context.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return stories.size();
+        return stories == null ? 0 : stories.size();
     }
 
     public static class ZhihuListViewHolder extends RecyclerView.ViewHolder {

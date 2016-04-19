@@ -64,7 +64,6 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
                 int count = recyclerView.getAdapter().getItemCount() - 1;
                 if (count > 0 && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mLayoutManager.findLastVisibleItemPosition() == count) {
-//                    Log.d("!@#", "request date:" + mStories.get(count).getDate());
                     mPresenter.loadMore(mStories.get(count).getDate());
                 }
             }
@@ -86,9 +85,6 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
             mStories.addAll(leastStories);
             mAdapter.notifyItemRangeInserted(0, mStories.size());
         }
-
-
-        //auto refresh
 //        mPresenter.refresh();
     }
 
@@ -137,7 +133,6 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
 
     @Override
     public void onFailed(String msg) {
-//        Toast.makeText(mContext.getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
         Snackbar.make(mRefresh, msg, Snackbar.LENGTH_SHORT).show();
     }
 

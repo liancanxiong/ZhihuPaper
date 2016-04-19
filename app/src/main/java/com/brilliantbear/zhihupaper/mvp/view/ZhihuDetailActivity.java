@@ -52,8 +52,7 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
         String title = intent.getStringExtra("title");
         id = intent.getStringExtra("id");
         String url = intent.getStringExtra("url");
-
-        Log.d("!@#", "title:" + title + " id:" + id + " url:" + url);
+        GlideUtils.load(this, url, ivPic);
 
         IDetailPresenter presenter = new ZhihuDetailPresenter(this, this);
         final ZhihuDetail detail = DB.getInstance().getZhihuDetailById(id);
@@ -62,11 +61,6 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
         } else {
             presenter.loadDetail(id);
         }
-
-        toolbarLayout.setTitle(title);
-        toolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-        toolbarLayout.setExpandedTitleColor(Color.WHITE);
-
     }
 
     @Override
@@ -95,11 +89,20 @@ public class ZhihuDetailActivity extends BaseActivity implements IDetailView {
 
 
     private void showDetail(ZhihuDetail detail) {
-        GlideUtils.load(this, detail.getImage(), ivPic);
+
+        toolbarLayout.setTitle(detail.getTitle());
+        toolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+        toolbarLayout.setExpandedTitleColor(Color.WHITE);
+
         String css = "<link rel=\"stylesheet\" href=\"file:///android_asset/css/news.css\" type=\"text/css\">";
         String html = "<html><head>" + css + "</head><body>" + detail.getBody() + "</body></html>";
         html = html.replace("<div class=\"img-place-holder\">", "");
         webDetail.loadDataWithBaseURL("x-data://base", html, "text/html", "UTF-8", null);
+
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0, 1);
+        alphaAnimation.setDuration(500);
+        webDetail.startAnimation(alphaAnimation);
+        GlideUtils.load(this, detail.getImage(), ivPic);
     }
 
     @Override
