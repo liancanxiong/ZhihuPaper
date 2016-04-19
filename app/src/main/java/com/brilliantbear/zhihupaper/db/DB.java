@@ -1,6 +1,7 @@
 package com.brilliantbear.zhihupaper.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,11 +81,16 @@ public class DB {
         }
     }
 
-    public void deleteZhihuStory(String date){
-        if(null != date){
+    public void deleteZhihuStory(String date) {
+        if (null != date) {
             realm.beginTransaction();
             realm.where(ZhihuStory.class).equalTo("date", date).findAll().clear();
             realm.commitTransaction();
         }
     }
+
+    public Realm getRealm(){
+        return realm;
+    }
+
 }

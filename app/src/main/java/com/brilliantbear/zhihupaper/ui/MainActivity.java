@@ -1,7 +1,10 @@
 package com.brilliantbear.zhihupaper.ui;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -10,11 +13,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import com.brilliantbear.zhihupaper.Constant;
 import com.brilliantbear.zhihupaper.R;
+import com.brilliantbear.zhihupaper.db.DB;
+import com.brilliantbear.zhihupaper.db.ZhihuDetail;
+import com.brilliantbear.zhihupaper.db.ZhihuStory;
+import com.brilliantbear.zhihupaper.db.ZhihuTop;
 import com.brilliantbear.zhihupaper.mvp.view.ZhihuListFragment;
+
+import io.realm.Realm;
 
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -93,7 +103,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 recreate();
                 break;
             case R.id.menu_cache:
-
+                showDeleteCacheDialog();
                 break;
             case R.id.menu_about:
 
@@ -101,5 +111,58 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
         showDrawer(false);
         return true;
+    }
+
+    private void showDeleteCacheDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.warning);
+        builder.setMessage(R.string.delete_cache);
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                showProgressDialog();
+            }
+        });
+        builder.show();
+    }
+
+    private void showProgressDialog() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+        progressDialog.setMessage(getString(R.string.deleting));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+
+        DB.getInstance().getRealm().executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.where(ZhihuStory.class).findAll().clear();
+                realm.where(ZhihuDetail.class).findAll().clear();
+                realm.where(ZhihuTop.class).findAll().clear();
+            }
+        }, new Realm.Transaction.Callback() {
+            @Override
+            public void onSuccess() {
+                super.onSuccess();
+                progressDialog.dismiss();
+                Snackbar.make(mCoordinator, getString(R.string.delete_cache_success), Snackbar.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                super.onError(e);
+                progressDialog.dismiss();
+                Snackbar.make(mCoordinator, getString(R.string.delete_cache_error), Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }

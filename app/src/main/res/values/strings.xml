@@ -10,4 +10,11 @@
     <string name="menu_cache">Clear cache</string>
     <string name="exit">Double click to quit the app</string>
     <string name="refresh_success">Data have refreshed...</string>
+    <string name="warning">Warning</string>
+    <string name="delete_cache">Delete the cache?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Yes</string>
+    <string name="deleting">Deleting cache</string>
+    <string name="delete_cache_success">Delete cache success</string>
+    <string name="delete_cache_error" >Delete cache failed</string>
 </resources>
