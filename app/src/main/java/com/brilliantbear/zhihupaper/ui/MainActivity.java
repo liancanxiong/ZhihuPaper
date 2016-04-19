@@ -14,7 +14,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.text.Html;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.brilliantbear.zhihupaper.Constant;
 import com.brilliantbear.zhihupaper.R;
@@ -106,11 +108,21 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showDeleteCacheDialog();
                 break;
             case R.id.menu_about:
-
+                shouAboutDialog();
                 break;
         }
         showDrawer(false);
         return true;
+    }
+
+    private void shouAboutDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        TextView textView = new TextView(this);
+        textView.setText(Html.fromHtml(getString(R.string.about)));
+        builder.setView(textView, 50, 50, 50, 0);
+        builder.setTitle(getString(R.string.menu_about));
+        builder.setPositiveButton(getString(R.string.confirm), null);
+        builder.show();
     }
 
     private void showDeleteCacheDialog() {
