@@ -1,6 +1,8 @@
 package com.brilliantbear.zhihupaper.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -10,11 +12,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
+import com.brilliantbear.zhihupaper.Constant;
 import com.brilliantbear.zhihupaper.R;
 import com.brilliantbear.zhihupaper.mvp.view.ZhihuListFragment;
 
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     DrawerLayout mDrawer;
     private CoordinatorLayout mCoordinator;
@@ -42,24 +45,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initNav() {
-        mNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_night:
-
-                        break;
-                    case R.id.menu_cache:
-
-                        break;
-                    case R.id.menu_about:
-
-                        break;
-                }
-                showDrawer(false);
-                return true;
-            }
-        });
+        mNav.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -70,6 +56,7 @@ public class MainActivity extends BaseActivity {
     private void initDrawer() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        toggle.setHomeAsUpIndicator(R.mipmap.ic_launcher);
         mDrawer.addDrawerListener(toggle);
         toggle.syncState();
     }
@@ -94,5 +81,25 @@ public class MainActivity extends BaseActivity {
             lastClick = newClick;
             Snackbar.make(mCoordinator, getString(R.string.exit), Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_night:
+                SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+                boolean isNight = sp.getBoolean(Constant.KEY_IS_NIGHT, false);
+                sp.edit().putBoolean(Constant.KEY_IS_NIGHT, !isNight).apply();
+                recreate();
+                break;
+            case R.id.menu_cache:
+
+                break;
+            case R.id.menu_about:
+
+                break;
+        }
+        showDrawer(false);
+        return true;
     }
 }

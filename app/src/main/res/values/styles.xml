@@ -2,19 +2,49 @@
 
     <!-- Base application theme. -->
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
     </style>
 
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="DayBaseTheme" parent="AppBaseTheme">
+        <item name="colorPrimary">@color/color_primary_day</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark_day</item>
+        <item name="colorAccent">@color/color_accent_day</item>
+        <item name="toolbarColor">@color/color_primary_day</item>
+        <item name="toolbarTextColor">@color/white</item>
+        <item name="content_background">@color/white</item>
+        <item name="text_background">@color/white</item>
+        <item name="text_color">@color/black</item>
+        <item name="divider_color">@color/date_bg</item>
+    </style>
+
+    <style name="NightBaseTheme" parent="AppBaseTheme">
+        <item name="colorPrimary">@color/color_primary_night</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark_night</item>
+        <item name="colorAccent">@color/color_accent_night</item>
+        <item name="toolbarColor">@color/color_primary_night</item>
+        <item name="toolbarTextColor">@color/while_light</item>
+        <item name="content_background">@color/color_primary_night</item>
+        <item name="text_background">@color/color_primary_night</item>
+        <item name="text_color">@color/while_light</item>
+        <item name="divider_color">@color/color_primary_dark_night</item>
+    </style>
+
+    <style name="DayTheme" parent="DayBaseTheme">
 
     </style>
 
+    <style name="NightTheme" parent="NightBaseTheme">
+
+    </style>
 
 </resources>

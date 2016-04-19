@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="toolbarColor" format="color" />
+    <attr name="toolbarTextColor" format="color" />
+    <attr name="content_background" format="color" />
+    <attr name="text_background" format="color" />
+    <attr name="text_color" format="color" />
+    <attr name="divider_color" format="color" />
+</resources>

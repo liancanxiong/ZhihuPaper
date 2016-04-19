@@ -4,5 +4,15 @@
     <color name="colorPrimaryDark">#1976D2</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
+
     <color name="date_bg">#7196F3</color>
+    <color name="while_light">#ADADAD</color>
+
+    <color name="color_primary_day">#2196f3</color>
+    <color name="color_primary_dark_day">#1976D2</color>
+    <color name="color_accent_day">#FF4081</color>
+    <color name="color_primary_night">#3A3A3A</color>
+    <color name="color_primary_dark_night">#353535</color>
+    <color name="color_accent_night">#4682B4</color>
+    <color name="black">#000000</color>
 </resources>
