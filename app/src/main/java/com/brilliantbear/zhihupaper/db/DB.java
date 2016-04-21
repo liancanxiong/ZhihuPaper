@@ -64,6 +64,7 @@ public class DB {
     public void saveZhihuTops(List<ZhihuTop> tops) {
         if (null != tops) {
             realm.beginTransaction();
+            realm.where(ZhihuTop.class).findAll().clear();
             for (ZhihuTop top : tops) {
                 realm.copyToRealmOrUpdate(top);
             }
@@ -89,8 +90,41 @@ public class DB {
         }
     }
 
-    public Realm getRealm(){
+    public Realm getRealm() {
         return realm;
     }
 
+
+    public List<String> getTopImageUrls() {
+        List<String> list = new ArrayList<>();
+        RealmResults<ZhihuTop> result = realm.where(ZhihuTop.class).findAll();
+        if (null != result) {
+            for (ZhihuTop top : result) {
+                list.add(top.getImage());
+            }
+        }
+        return list;
+    }
+
+    public List<ZhihuTop> getZhihuTops(){
+        List<ZhihuTop> list = new ArrayList<>();
+        RealmResults<ZhihuTop> result = realm.where(ZhihuTop.class).findAll();
+        if (null != result) {
+            for (ZhihuTop top : result) {
+                list.add(top);
+            }
+        }
+        return list;
+    }
+
+    public List<String> getTopTitles() {
+        List<String> list = new ArrayList<>();
+        RealmResults<ZhihuTop> result = realm.where(ZhihuTop.class).findAll();
+        if (null != result) {
+            for (ZhihuTop top : result) {
+                list.add(top.getTitle());
+            }
+        }
+        return list;
+    }
 }

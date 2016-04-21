@@ -12,6 +12,7 @@ import com.brilliantbear.zhihupaper.R;
 import com.brilliantbear.zhihupaper.adapter.ZhihuListAdapter;
 import com.brilliantbear.zhihupaper.db.DB;
 import com.brilliantbear.zhihupaper.db.ZhihuStory;
+import com.brilliantbear.zhihupaper.db.ZhihuTop;
 import com.brilliantbear.zhihupaper.mvp.presenter.IListPresenter;
 import com.brilliantbear.zhihupaper.mvp.presenter.ZhihuListPresenter;
 import com.brilliantbear.zhihupaper.mvp.view.IListView;
@@ -37,6 +38,7 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
     private LinearLayoutManager mLayoutManager;
     private ZhihuListAdapter mAdapter;
     private List<ZhihuStory> mStories;
+    private List<ZhihuTop> mTops;
     private DB db;
 
 
@@ -64,7 +66,7 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
                 int count = recyclerView.getAdapter().getItemCount() - 1;
                 if (count > 0 && newState == RecyclerView.SCROLL_STATE_IDLE &&
                         mLayoutManager.findLastVisibleItemPosition() == count) {
-                    mPresenter.loadMore(mStories.get(count).getDate());
+                    mPresenter.loadMore(mStories.get(count - 1).getDate());
                 }
             }
         });
@@ -75,8 +77,9 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
         super.initData();
         mPresenter = new ZhihuListPresenter(mContext, this);
         mStories = new ArrayList<>();
+        mTops = new ArrayList<>();
 
-        mAdapter = new ZhihuListAdapter(mContext, mStories);
+        mAdapter = new ZhihuListAdapter(mContext, mStories, mTops);
         rvNews.setAdapter(mAdapter);
 
         db = DB.getInstance();
@@ -85,7 +88,19 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
             mStories.addAll(leastStories);
             mAdapter.notifyItemRangeInserted(0, mStories.size());
         }
+
+        updateBanner(db);
 //        mPresenter.refresh();
+    }
+
+
+    public void updateBanner(DB db) {
+        List<ZhihuTop> zhihuTops = db.getZhihuTops();
+        if(null != zhihuTops){
+            mTops.clear();
+            mTops.addAll(zhihuTops);
+        }
+        mAdapter.notifyItemChanged(0);
     }
 
     private void showRefresh(boolean isShow) {
@@ -107,13 +122,16 @@ public class ZhihuListFragment extends BaseFragment implements IListView, SwipeR
             mStories.addAll(leastStories);
             mAdapter.notifyDataSetChanged();
         }
+
+        updateBanner(db);
+
         Snackbar.make(mRefresh, getString(R.string.refresh_success), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override
     public void dataLoadMore() {
         int position = mLayoutManager.findLastVisibleItemPosition();
-        String date = String.valueOf(Integer.valueOf(mStories.get(position).getDate()) - 1);
+        String date = String.valueOf(Integer.valueOf(mStories.get(position - 1).getDate()) - 1);
         List<ZhihuStory> stories = db.getStoriesByDate(date);
         if (null != stories) {
             mStories.addAll(stories);
