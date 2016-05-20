@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
@@ -108,14 +107,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 showDeleteCacheDialog();
                 break;
             case R.id.menu_about:
-                shouAboutDialog();
+                showAboutDialog();
                 break;
         }
         showDrawer(false);
         return true;
     }
 
-    private void shouAboutDialog() {
+    private void showAboutDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         TextView textView = new TextView(this);
         textView.setText(Html.fromHtml(getString(R.string.about)));

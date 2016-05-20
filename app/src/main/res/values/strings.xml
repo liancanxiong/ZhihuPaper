@@ -17,5 +17,5 @@
     <string name="deleting">Deleting cache</string>
     <string name="delete_cache_success">Delete cache success</string>
     <string name="delete_cache_error" >Delete cache failed</string>
-    <string name="about"><![CDATA[<h2>应用：小报</h2><h2>作者: brilliantBear<h2><h3>本应用内容全部来自知乎<a href="https://www.zhihu.com/">https://www.zhihu.com/</a></h3><h3>感谢: Izzy Leung</h3><div>联系我:<a href="mailto:canxionglian@gmail.com">canxionglian@gmail.com</a></div>]]></string>
+    <string name="about"><![CDATA[<h2>应用：小报</h2><h2>作者: brilliantBear<h2><h3>本应用内容全部来自<a href="https://www.zhihu.com/">知乎</a></h3><h3>感谢: Izzy Leung</h3><div>联系我:<a href="mailto:canxionglian@gmail.com">canxionglian@gmail.com</a></div>]]></string>
 </resources>
